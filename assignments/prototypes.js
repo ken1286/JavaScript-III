@@ -154,8 +154,13 @@ Humanoid.prototype.greet = function(){
   Villain.prototype = Object.create(Humanoid.prototype);
   Hero.prototype = Object.create(Villain.prototype);
   // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
+
+  Villain.prototype.attack = function(object) {
+    object.healthPoints -= Math.floor(Math.random() * 5) + 1;
+    return `${this.name} savagely attacks ${object.name}.\n${object.name}'s healthpoints are now ${object.healthPoints}`;
+  };
+
   Villain.prototype.fight = function(object) {
-    object.healthPoints -= 5;
 //     if(object.healthPoints <= 0) {
 //       return `${this.name} savagely attacks ${object.name}.
 // ${object.takeDamage()}
@@ -168,18 +173,24 @@ Humanoid.prototype.greet = function(){
 // ${object.takeDamage()}
 // Their healthpoints are now ${object.healthPoints}`;
 // }
-    while(object.healthPoints > 0 && object.healthPoints > 0) {
-      object.healthPoints -= 2;
-      this.healthPoints -= 2;
-      console.log(`${this.name} savagely attacks ${object.name}.\n${object.name}'s healthpoints are now ${object.healthPoints}`)
-      console.log(`${object.name} brutally attacks ${this.name}.\n${this.name}'s healthpoints are now ${this.healthPoints}`)
+    while(object.healthPoints > 0 && this.healthPoints > 0) {
+      console.log(this.attack(object));
+      console.log(object.attack(this));
+      // object.healthPoints -= Math.floor(Math.random() * 5) + 1;
+      // this.healthPoints -= Math.floor(Math.random() * 5) + 1;
+      // console.log(`${this.name} savagely attacks ${object.name}.\n${object.name}'s healthpoints are now ${object.healthPoints}`)
+      // console.log(`${object.name} brutally attacks ${this.name}.\n${this.name}'s healthpoints are now ${this.healthPoints}`)
     }
-    if(object.healthPoints <= 0) {
+
+    if(object.healthPoints <= 0 && this.healthPoints <= 0) {
+      return [ object.destroy(), this.destroy() ];
+    } else if (object.healthPoints <= 0) {
       return object.destroy();
+    } else {
+      return this.destroy();
     }
-    return this.destroy();
     // commented out first test when I thought of a while loop
-  }
+  };
 
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
   const bob = new Villain({
