@@ -38,8 +38,10 @@ function CharacterStats(attributes) {
   this.healthPoints = attributes.healthPoints;
 }
 
+CharacterStats.prototype = Object.create(GameObject.prototype);
+
 CharacterStats.prototype.takeDamage = function(){
-  return `${this.name} took damage`;
+  return `${this.name} took damage.`;
 }
 
 /*
@@ -59,6 +61,8 @@ function Humanoid(attributes) {
   this.language = attributes.language;
 }
 
+Humanoid.prototype = Object.create(CharacterStats.prototype);
+
 Humanoid.prototype.greet = function(){
   return `${this.name} offers a greeting in ${this.language}`;
 }
@@ -68,8 +72,8 @@ Humanoid.prototype.greet = function(){
   * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
   * Instances of CharacterStats should have all of the same properties as GameObject.
 */
-CharacterStats.prototype = Object.create(GameObject.prototype);
-Humanoid.prototype = Object.create(CharacterStats.prototype);
+
+
 
 
 // Test you work by un-commenting these 3 objects and the list of console logs below:
@@ -138,6 +142,79 @@ Humanoid.prototype = Object.create(CharacterStats.prototype);
 
 
   // Stretch task: 
-  // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
+  // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.
+  function Villain(attributes) {
+    Humanoid.call(this, attributes);
+  }
+
+  function Hero(attributes) {
+    Humanoid.call(this, attributes);
+  }
+
+  Villain.prototype = Object.create(Humanoid.prototype);
+  Hero.prototype = Object.create(Villain.prototype);
   // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
+  Villain.prototype.fight = function(object) {
+    object.healthPoints -= 5;
+//     if(object.healthPoints <= 0) {
+//       return `${this.name} savagely attacks ${object.name}.
+// ${object.takeDamage()}
+// Their healthpoints are now ${object.healthPoints}
+// ${object.destroy()}`;
+//     }
+//     else {
+//       this.attack(object);
+//       return `${this.name} savagely attacks ${object.name}.
+// ${object.takeDamage()}
+// Their healthpoints are now ${object.healthPoints}`;
+// }
+    while(object.healthPoints > 0 && object.healthPoints > 0) {
+      object.healthPoints -= 2;
+      this.healthPoints -= 2;
+      console.log(`${this.name} savagely attacks ${object.name}.\n${object.name}'s healthpoints are now ${object.healthPoints}`)
+      console.log(`${object.name} brutally attacks ${this.name}.\n${this.name}'s healthpoints are now ${this.healthPoints}`)
+    }
+    if(object.healthPoints <= 0) {
+      return object.destroy();
+    }
+    return this.destroy();
+    // commented out first test when I thought of a while loop
+  }
+
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
+  const bob = new Villain({
+    createdAt: new Date(),
+    dimensions: {
+      length: 2,
+      width: 2,
+      height: 3,
+    },
+    healthPoints: 20,
+    name: `Bob`,
+    team: `Evil Knights of Death`,
+    weapons: [
+      `Flaming Sword`,
+      `Bow of Destruction`,
+    ],
+    language: `Evilese`,
+  });
+
+  const jane = new Hero({
+    createdAt: new Date(),
+    dimensions: {
+      length: 1,
+      width: 2,
+      height: 4,
+    },
+    healthPoints: 20,
+    name: `Jane`,
+    team: `Good Wizards of Happiness`,
+    weapons: [
+      `Blessed Staff of Wizardry`,
+      `Friendly Dagger of Pointiness`,
+    ],
+    language: `Goodish`,
+  });
+
+  // console.log(bob.fight(archer));
+  console.log(bob.fight(jane));
