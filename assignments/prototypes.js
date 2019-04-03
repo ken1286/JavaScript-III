@@ -228,4 +228,6 @@ Humanoid.prototype.greet = function(){
   });
 
   // console.log(bob.fight(archer));
+  console.log(bob.attack(mage));
+  console.log(jane.attack(archer));
   console.log(bob.fight(jane));
